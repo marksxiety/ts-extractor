@@ -1,2 +1,4 @@
 node_modules
 logfiles/*
+*.csv
+*.txt
