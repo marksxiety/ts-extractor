@@ -44,4 +44,30 @@ const extractInformation = (path: string, filename: string | string[]) => {
 
 // Extract information from multiple files (filtered CSV files)
 const extractedInfo = extractInformation(logfilesPath, filteredFiles)
-console.log(extractedInfo)
+
+
+const processExtraction = (data: string[], row: number, header: string) => {
+    let extractionResult: any[] = []
+
+    // loop first the content every filename
+    for (let i = 0; i < data.length; i++) {
+
+        // loop the content
+        for (let j = 1; j < data[i].length; j++) {
+            // find the row in the loop and the row number
+            if (j === row) {
+                if (data[i][j][0].toLowerCase() === header.toLowerCase()) {
+                    extractionResult.push(data[i][j][1]) // assuming that the data is in the next column
+                }
+            }
+        }
+    }
+   
+    if (extractionResult.length > 0) {
+        return console.log(extractionResult)
+    } else {
+        return console.log('No data found')
+    }
+}
+
+processExtraction(extractedInfo, 1, 'SN:')
