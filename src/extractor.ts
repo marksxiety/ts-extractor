@@ -28,13 +28,17 @@ const extractInformation = (path: string, filename: string | string[]) => {
     // If multiple files are provided, process each file
     if (Array.isArray(filename)) {
         for (let index = 0; index < filename.length; index++) {
-            extractedInformations.push(
-                processFileInfo({ path, filename: filename[index] })
-            )
+            extractedInformations.push({
+                filename: filename[index],
+                content: processFileInfo({ path, filename: filename[index] })
+            })
         }
     } else {
         // If a single file is provided, process it
-        extractedInformations.push(processFileInfo({ path, filename }))
+        extractedInformations.push({
+            filename: filename,
+            content: processFileInfo({ path, filename: filename })
+        })
     }
     return extractedInformations
 }
