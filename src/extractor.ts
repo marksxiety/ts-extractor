@@ -51,23 +51,20 @@ const processExtraction = (data: string[], row: number, header: string) => {
 
     // loop first the content every filename
     for (let i = 0; i < data.length; i++) {
-
-        // loop the content
-        for (let j = 1; j < data[i].length; j++) {
+        // loop the content (pre row) that treated as an array
+        for (let j = 0; j < data[i].length; j++) {
             // find the row in the loop and the row number
-            if (j === row) {
+            if ((row - 1) === j) {
                 if (data[i][j][0].toLowerCase() === header.toLowerCase()) {
                     extractionResult.push(data[i][j][1]) // assuming that the data is in the next column
                 }
             }
         }
     }
-   
     if (extractionResult.length > 0) {
         return console.log(extractionResult)
     } else {
         return console.log('No data found')
     }
 }
-
-processExtraction(extractedInfo, 1, 'SN:')
+processExtraction(extractedInfo, 1, 'program:')
