@@ -43,32 +43,40 @@ const extractInformation = (path: string, filename: string | string[]) => {
     return extractedInformations
 }
 
-// Uncomment this to test extraction for a single file
-// const extractedInfo = extractInformation(logfilesPath, 'testlogfile1.csv')
-
-// Extract information from multiple files (filtered CSV files)
-const extractedInfo = extractInformation(logfilesPath, filteredFiles)
-
-
-const processExtraction = (data: string[], row: number, header: string) => {
+const processExtraction = (data: { filename: string; content: string[] }[], row: number, header: string) => {
     let extractionResult: any[] = []
 
-    // loop first the content every filename
-    for (let i = 0; i < data.length; i++) {
-        // loop the content (pre row) that treated as an array
-        for (let j = 0; j < data[i].length; j++) {
-            // find the row in the loop and the row number
-            if ((row - 1) === j) {
-                if (data[i][j][0].toLowerCase() === header.toLowerCase()) {
-                    extractionResult.push(data[i][j][1]) // assuming that the data is in the next column
+    // loop first the data parameter that includes content and filename
+    data.forEach((info) => {
+        let filecontent = info.content
+        let filename = info.filename
+        for (let i = 0; i < filecontent.length; i++) {
+
+            // loop the content (pre row) that treated as an array
+            for (let j = 0; j < filecontent[i].length; j++) {
+
+                // find the row in the loop and the row number
+                if ((row - 1) === j) {
+                    if (filecontent[i][j].toLowerCase() === header.toLowerCase()) {
+                        extractionResult.push({
+                            filename: filename,
+                            header: header,
+                            row: row,
+                            values: filecontent[i][1] // assuming that the data is in the next column
+                        }) 
+                    }
                 }
             }
         }
-    }
+    })
+
     if (extractionResult.length > 0) {
         return console.log(extractionResult)
     } else {
         return console.log('No data found')
     }
 }
+
+// Extract information from multiple files (filtered CSV files)
+const extractedInfo = extractInformation(logfilesPath, filteredFiles)
 processExtraction(extractedInfo, 1, 'program:')
