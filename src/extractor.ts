@@ -44,39 +44,38 @@ const extractInformation = (path: string, filename: string | string[]) => {
 }
 
 const processExtraction = (data: { filename: string; content: string[] }[], row: number, header: string) => {
-    let extractionResult: any[] = []
+
+    let extractionResult: {
+        filename: string;
+        header: string;
+        row: number;
+        values: string;
+    }[] = [];
 
     // loop first the data parameter that includes content and filename
     data.forEach((info) => {
         let filecontent = info.content
         let filename = info.filename
-        for (let i = 0; i < filecontent.length; i++) {
 
-            // loop the content (pre row) that treated as an array
-            for (let j = 0; j < filecontent[i].length; j++) {
-
-                // find the row in the loop and the row number
-                if ((row - 1) === j) {
-                    if (filecontent[i][j].toLowerCase() === header.toLowerCase()) {
-                        extractionResult.push({
-                            filename: filename,
-                            header: header,
-                            row: row,
-                            values: filecontent[i][1] // assuming that the data is in the next column
-                        }) 
-                    }
-                }
-            }
+        if (filecontent[row - 1] && filecontent[row - 1][0].toLowerCase() === header.toLowerCase()) {
+            extractionResult.push({
+                filename: filename,
+                header: header,
+                row: row,
+                values: filecontent[row - 1][1]
+            })
+        } else {
+            extractionResult.push({
+                filename: filename,
+                header: header,
+                row: row,
+                values: ''
+            })
         }
     })
-
-    if (extractionResult.length > 0) {
-        return console.log(extractionResult)
-    } else {
-        return console.log('No data found')
-    }
+    return extractionResult
 }
 
 // Extract information from multiple files (filtered CSV files)
 const extractedInfo = extractInformation(logfilesPath, filteredFiles)
-processExtraction(extractedInfo, 1, 'program:')
+console.log(processExtraction(extractedInfo, 5, 'status:'))
