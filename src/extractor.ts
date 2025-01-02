@@ -47,9 +47,7 @@ const processExtraction = (data: { filename: string; content: string[] }[], row:
 
     let extractionResult: {
         filename: string;
-        header: string;
-        row: number;
-        values: string;
+        [key: string]: string | number;
     }[] = [];
 
     // loop first the data parameter that includes content and filename
@@ -60,16 +58,12 @@ const processExtraction = (data: { filename: string; content: string[] }[], row:
         if (filecontent[row - 1] && filecontent[row - 1][0].toLowerCase() === header.toLowerCase()) {
             extractionResult.push({
                 filename: filename,
-                header: header,
-                row: row,
-                values: filecontent[row - 1][1]
+                [header]: filecontent[row - 1][1]
             })
         } else {
             extractionResult.push({
                 filename: filename,
-                header: header,
-                row: row,
-                values: ''
+                [header]: ''
             })
         }
     })
@@ -78,4 +72,4 @@ const processExtraction = (data: { filename: string; content: string[] }[], row:
 
 // Extract information from multiple files (filtered CSV files)
 const extractedInfo = extractInformation(logfilesPath, filteredFiles)
-console.log(processExtraction(extractedInfo, 5, 'status:'))
+console.log(processExtraction(extractedInfo, 5, 'Machine name:'))
